@@ -1,12 +1,13 @@
 import cv2
 import mediapipe as mp
+from src.checkers.audio_controll import AudioControll
 from src.checkers.eyecheck import EyeCheck
 
 def _map(ratio, in_min, in_max, out_min, out_max):
     return int((ratio - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
 class Blinker:
-    def __init__(self, blink_checker, eyes_in_max, eyes_out_max, show_image = True, cap_source = 0) -> None:
+    def __init__(self, blink_checker, eyes_in_max, eyes_out_max, show_image = True, cap_source = 0, each_piscadas = 300) -> None:
         self.blink_checker = blink_checker
 
         self.eyes_in_max = eyes_in_max
@@ -21,10 +22,20 @@ class Blinker:
 
         self.eye_checker = EyeCheck(width, height)
 
+        self.audio_controll = AudioControll([])
+
+        self.each_piscadas = each_piscadas
+
         self.config()
 
     def config(self):
         self.cap.set(cv2.CAP_PROP_FPS, 25.0)
+
+    def with_audios(self, audios = []):
+        self.audio_controll.audios = audios
+
+    def play_audio(self):
+        self.audio_controll.play_random()
 
     def blink_things(self, results, image):
         face_landmarks = None
@@ -44,8 +55,14 @@ class Blinker:
         try:
             mediaRatio = self.eye_checker.blink_ratio(eye_distancies[0], eye_distancies[1])
             ratioMapped = _map(mediaRatio, 0, self.eyes_in_max, self.eyes_out_max, 0)
-            self.blink_checker.blink(ratioMapped)
+            piscou = self.blink_checker.blink(ratioMapped)
+            if piscou:
+                piscadas = self.blink_checker.blink_count
+                if (piscadas % self.each_piscadas) == 0:
+                    self.play_audio()
+
         except Exception as e:
+            print(e)
             return
         
          # SHOW ON IMAGE

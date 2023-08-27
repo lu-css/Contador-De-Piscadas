@@ -17,8 +17,11 @@ def main():
     blinker = Blinker(blink_checker,
                       EYE_IN_MAX,
                       EYE_OUT_MIN,
-                      show_image=False
+                      show_image=False,
+                      each_piscadas=300
                       )
+
+    blinker.with_audios(['/home/santos/Downloads/deixar-de-ser-besta.mp3'])
 
     blinker.run()
 main()

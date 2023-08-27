@@ -60,6 +60,9 @@ class BlinkCheck:
         if not self.eyes_closed and ratio < self.eyes_close_on:
             self.inc_blinks()
             self.eyes_closed = True
+            return True
 
         if self.eyes_closed and ratio >= self.eyes_open_on:
             self.eyes_closed = False
+
+        return False
