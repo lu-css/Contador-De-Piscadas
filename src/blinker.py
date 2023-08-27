@@ -39,11 +39,13 @@ class Blinker:
             return
 
         eye_distancies = self.eye_checker.eyes_distance(eye_cords)
-        mediaRatio = self.eye_checker.blink_ratio(eye_distancies[0], eye_distancies[1])
 
-        ratioMapped = _map(mediaRatio, 0, self.eyes_in_max, self.eyes_out_max, 0)
-
-        self.blink_checker.blink(ratioMapped)
+        try:
+            mediaRatio = self.eye_checker.blink_ratio(eye_distancies[0], eye_distancies[1])
+            ratioMapped = _map(mediaRatio, 0, self.eyes_in_max, self.eyes_out_max, 0)
+            self.blink_checker.blink(ratioMapped)
+        except Exception as e:
+            return
         
          # SHOW ON IMAGE
         font = cv2.FONT_HERSHEY_SIMPLEX
