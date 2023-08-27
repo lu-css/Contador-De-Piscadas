@@ -6,11 +6,12 @@ def _map(ratio, in_min, in_max, out_min, out_max):
     return int((ratio - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
 class Blinker:
-    def __init__(self, blink_checker, eyes_in_max, eyes_out_max, cap_source = 0) -> None:
+    def __init__(self, blink_checker, eyes_in_max, eyes_out_max, show_image = True, cap_source = 0) -> None:
         self.blink_checker = blink_checker
 
         self.eyes_in_max = eyes_in_max
         self.eyes_out_max = eyes_out_max
+        self.show_image = show_image
 
         self.cap = cv2.VideoCapture(cap_source)
         self.mp_face_mesh = mp.solutions.face_mesh
@@ -76,7 +77,8 @@ class Blinker:
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
                 self.blink_things(results, image)
-                cv2.imshow('MediaPipe Face Mesh', image)
+                if self.show_image:
+                    cv2.imshow('MediaPipe Face Mesh', image)
 
                 # Exit
                 if cv2.waitKey(5) & 0xFF == ord('q'):

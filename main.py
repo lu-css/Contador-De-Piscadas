@@ -14,7 +14,11 @@ def main():
             save_file=True,
             file_path='out'
             )
-    blinker = Blinker(blink_checker, EYE_IN_MAX, EYE_OUT_MIN)
+    blinker = Blinker(blink_checker,
+                      EYE_IN_MAX,
+                      EYE_OUT_MIN,
+                      show_image=False
+                      )
 
     blinker.run()
 main()
