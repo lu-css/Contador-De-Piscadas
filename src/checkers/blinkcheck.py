@@ -1,19 +1,20 @@
 import os
 
 class BlinkCheck:
-    def __init__(self, close_on, open_on, save_file = False) -> None:
+    def __init__(self, close_on, open_on, save_file = False, file_path = 'out') -> None:
         self.eyes_close_on = close_on
         self.eyes_open_on = open_on
         self.eyes_closed = False
         self.save_file = save_file
-        self.file_path = 'out/output.txt'
+        self.path = file_path
+        self.file_path = f'{file_path}/piscadas.txt'
         self.blink_count = 0
         self._config()
 
     def _config(self):
         self._config_blink()
-        if not os.path.exists('out'):
-            os.makedirs('out')
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
 
     def _config_blink(self):
         if not self.save_file:
