@@ -27,11 +27,15 @@ class Blinker:
 
     def blink_things(self, results, image):
         face_landmarks = None
+
         try:
             face_landmarks = results.multi_face_landmarks[0].landmark
             eye_cords = self.eye_checker.eye_cords(face_landmarks)
         except:
             print("Face not found")
+            return
+
+        if not face_landmarks:
             return
 
         eye_distancies = self.eye_checker.eyes_distance(eye_cords)
